@@ -1,0 +1,6 @@
+RewriteEngine On
+    RewriteBase /Contact_App_5/
+    RewriteRule ^index\\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /Contact_App_5/index.php [L]

@@ -1,37 +1,35 @@
 <?php
+
 class App {
     protected $controller = 'Home';
     protected $method = 'index';
     protected $params = [];
 
-    public function __construct ()
+    public function __construct()
     {
         $url = $this->parseURL();
 
-        // Mencari file controller
-        if ($url && file_exists('../app/controllers/' . $url[0] . 'Controller.php')) {
+        if ($url && file_exists('../app/controllers/' . $url[0] . '.php')) {
             $this->controller = $url[0];
             unset($url[0]);
         }
-            
-        // Memuat file controller
-        require_once '../app/controllers/' . $this->controller . 'Controller.php';
+
+        require_once '../app/controllers/' . $this->controller . '.php';
         $this->controller = new $this->controller;
 
-        // Method
+        // method
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
         }
 
-        // Parameter
+        // params
         $this->params = $url ? array_values($url) : [];
 
-        // Memanggil method dalam controller dengan parameter yang diberikan
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 
-    public function parseURL() 
+    public function parseURL()
     {
         if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');
@@ -43,19 +41,5 @@ class App {
         }
     }
 }
+
 ?>
-
-<?php
-$request_uri = $_SERVER['REQUEST_URI'];
-
-// Tentukan bagaimana permintaan akan ditangani
-if ($request_uri == '/login') {
-    include 'index.php'; // Ganti dengan path file login Anda
-} elseif ($request_uri == '/homepage') {
-    include 'homepage.php'; // Ganti dengan path file homepage Anda
-} else {
-    // Jika permintaan tidak sesuai dengan yang diharapkan, lakukan penanganan lainnya
-    echo "404 Not Found";
-}
-?>
-
